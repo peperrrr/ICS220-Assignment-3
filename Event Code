@@ -6,6 +6,7 @@ from tkinter import messagebox
 
 # Base class for all employees
 class Employee:
+    # Initializes an Employee object with personal and job-related attributes.
     def __init__(
             self,
             name,
@@ -16,7 +17,7 @@ class Employee:
             age,
             date_of_birth,
             passport_details,
-            manager_id=None,
+            manager_id=None,  # Optional attribute; defaults to None if not provided
     ):
         self.name = name
         self.employee_id = employee_id
@@ -26,35 +27,39 @@ class Employee:
         self.age = age
         self.date_of_birth = date_of_birth
         self.passport_details = passport_details
-        self.manager_id = manager_id
+        self.manager_id = manager_id  # Stores the ID of the manager, if applicable
 
 # Manager class inheriting from Employee
 class Manager(Employee):
+    # Extends Employee with attributes specific to a Manager's responsibilities.
     def __init__(self, team_size, department_budget, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.team_size = team_size
-        self.department_budget = department_budget
+        super().__init__(*args, **kwargs)  # Calls the constructor of the Employee class
+        self.team_size = team_size  # Size of the team the manager is responsible for
+        self.department_budget = department_budget  # Budget managed by the Manager
 
 # Salesperson class inheriting from Employee
 class Salesperson(Employee):
+    # Extends Employee with attributes specific to a Salesperson's job role.
     def __init__(self, sales_target, commission_rate, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.sales_target = sales_target
-        self.commission_rate = commission_rate
-#Class to introduce the Employee which are the security for Venues to be able to add as much security to a venue
-class GuestSecurity:
-    def __init__(self, security_clearance_level, assigned_venue, security_shift):
-        self.security_clearance_level = security_clearance_level
-        self.assigned_venue = assigned_venue
-        self.security_shift = security_shift
+        super().__init__(*args, **kwargs)  # Calls the constructor of the Employee class
+        self.sales_target = sales_target  # The sales target that the Salesperson must achieve
+        self.commission_rate = commission_rate  # Commission rate for the Salesperson
 
+# GuestSecurity class for venue security personnel
+class GuestSecurity(Employee):
+    # Extends Employee with attributes specific to a security staff member's role.
+    def __init__(self, security_clearance_level, assigned_venue, security_shift):
+        self.security_clearance_level = security_clearance_level  # Security clearance level of the personnel
+        self.assigned_venue = assigned_venue  # The venue to which the security personnel is assigned
+        self.security_shift = security_shift  # Shift details for the security personnel
 
 # Event class
 class Event:
+    # Initializes an Event object with details about the event.
     def __init__(
             self,
             event_id,
-            event_type,  # Change the parameter name
+            event_type,
             theme,
             date,
             time,
@@ -70,70 +75,78 @@ class Event:
             invoice,
     ):
         self.event_id = event_id
-        self.event_type = event_type
-        self.theme = theme
-        self.date = date
-        self.time = time
-        self.duration = duration
-        self.venue_address = venue_address
-        self.client_id = client_id
-        self.guest_list = guest_list
+        self.event_type = event_type  # Type of the event (e.g., wedding, conference)
+        self.theme = theme  # Theme of the event
+        self.date = date  # Date of the event
+        self.time = time  # Time the event starts
+        self.duration = duration  # Duration of the event
+        self.venue_address = venue_address  # Address of the event venue
+        self.client_id = client_id  # Client ID for whom the event is organized
+        self.guest_list = guest_list  # List of guests attending the event
+        # Companies providing various services for the event
         self.catering_company = catering_company
         self.cleaning_company = cleaning_company
         self.decorations_company = decorations_company
         self.entertainment_company = entertainment_company
         self.furniture_supply_company = furniture_supply_company
-        self.invoice = invoice
+        self.invoice = invoice  # Invoice details for the event
 
 # Client class
 class Client:
+    # Initializes a Client object with contact and financial details.
     def __init__(self, client_id, name, address, contact_details, budget):
-        self.client_id = client_id
-        self.name = name
-        self.address = address
-        self.contact_details = contact_details
-        self.budget = budget
+        self.client_id = client_id  # Unique identifier for the client
+        self.name = name  # Name of the client
+        self.address = address  # Address of the client
+        self.contact_details = contact_details  # Contact details for the client
+        self.budget = budget  # Budget the client has for events
 
 # Guest class
 class Guest:
+    # Initializes a Guest object with personal contact details.
     def __init__(self, guest_id, name, address, contact_details):
-        self.guest_id = guest_id
-        self.name = name
-        self.address = address
-        self.contact_details = contact_details
+        self.guest_id = guest_id  # Unique identifier for the guest
+        self.name = name  # Name of the guest
+        self.address = address  # Address of the guest
+        self.contact_details = contact_details  # Contact details for the guest
 
 # Supplier class
 class Supplier:
+    # Initializes a Supplier object who provides services for events.
     def __init__(self, supplier_id, name, address, contact_details, service_provided):
-        self.supplier_id = supplier_id
-        self.name = name
-        self.address = address
-        self.contact_details = contact_details
-        self.service_provided = service_provided
+        self.supplier_id = supplier_id  # Unique identifier for the supplier
+        self.name = name  # Name of the supplier company
+        self.address = address  # Address of the supplier
+        self.contact_details = contact_details  # Contact details for the supplier
+        self.service_provided = service_provided  # Services that the supplier provides
 
 # Venue class
 class Venue:
+    # Initializes a Venue object with location and capacity details.
     def __init__(self, venue_id, name, address, contact, min_guests, max_guests):
-        self.venue_id = venue_id
-        self.name = name
-        self.address = address
-        self.contact = contact
-        self.min_guests = min_guests
-        self.max_guests = max_guests
+        self.venue_id = venue_id  # Unique identifier for the venue
+        self.name = name  # Name of the venue
+        self.address = address  # Address of the venue
+        self.contact = contact  # Contact information for the venue
+        self.min_guests = min_guests  # Minimum number of guests the venue can accommodate
+        self.max_guests = max_guests  # Maximum number of guests the venue can accommodate
 
 # Service class
 class Service:
+    # Initializes a Service object with details about the service provided.
     def __init__(self, service_id, name, description):
-        self.service_id = service_id
-        self.name = name
-        self.description = description
+        self.service_id = service_id  # Unique identifier for the service
+        self.name = name  # Name of the service
+        self.description = description  # Description of the service provided
 
 # Invoice class
 class Invoice:
+    # Initializes an Invoice object with billing details for services rendered.
     def __init__(self, invoice_id, amount, details):
-        self.invoice_id = invoice_id
-        self.amount = amount
-        self.details = details
+        self.invoice_id = invoice_id  # Unique identifier for the invoice
+        self.amount = amount  # The amount billed in the invoice
+        self.details = details  # Detailed description of the charges
+
 
 # Example function to add an employee
 def add_employee(employee_data):
