@@ -1,17 +1,32 @@
 import pickle
-from datetime import datetime
+import os
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
 
 # Base class for all employees
 class Employee:
-    def __init__(self, name, id_number, department, job_title, basic_salary, age, date_of_birth, passport_details):
+    def __init__(
+            self,
+            name,
+            employee_id,
+            department,
+            job_title,
+            basic_salary,
+            age,
+            date_of_birth,
+            passport_details,
+            manager_id=None,
+    ):
         self.name = name
-        self.id_number = id_number
+        self.employee_id = employee_id
         self.department = department
         self.job_title = job_title
         self.basic_salary = basic_salary
         self.age = age
         self.date_of_birth = date_of_birth
         self.passport_details = passport_details
+        self.manager_id = manager_id
 
 # Manager class inheriting from Employee
 class Manager(Employee):
@@ -26,21 +41,49 @@ class Salesperson(Employee):
         super().__init__(*args, **kwargs)
         self.sales_target = sales_target
         self.commission_rate = commission_rate
+#Class to introduce the Employee which are the security for Venues to be able to add as much security to a venue
+class GuestSecurity:
+    def __init__(self, security_clearance_level, assigned_venue, security_shift):
+        self.security_clearance_level = security_clearance_level
+        self.assigned_venue = assigned_venue
+        self.security_shift = security_shift
+
 
 # Event class
 class Event:
-    def __init__(self, event_id, event_type, theme, date, time, duration,guest):
+    def __init__(
+            self,
+            event_id,
+            event_type,  # Change the parameter name
+            theme,
+            date,
+            time,
+            duration,
+            venue_address,
+            client_id,
+            guest_list,
+            catering_company,
+            cleaning_company,
+            decorations_company,
+            entertainment_company,
+            furniture_supply_company,
+            invoice,
+    ):
         self.event_id = event_id
         self.event_type = event_type
         self.theme = theme
-        self.date = datetime.strptime(date, '%Y-%m-%d')
+        self.date = date
         self.time = time
         self.duration = duration
-        self.venue = None
-        self.client = None
-        self.guest_list = []
-        self.suppliers = []
-        self.invoice = None
+        self.venue_address = venue_address
+        self.client_id = client_id
+        self.guest_list = guest_list
+        self.catering_company = catering_company
+        self.cleaning_company = cleaning_company
+        self.decorations_company = decorations_company
+        self.entertainment_company = entertainment_company
+        self.furniture_supply_company = furniture_supply_company
+        self.invoice = invoice
 
 # Client class
 class Client:
@@ -61,12 +104,12 @@ class Guest:
 
 # Supplier class
 class Supplier:
-    def __init__(self, supplier_id, name, address, contact_details):
+    def __init__(self, supplier_id, name, address, contact_details, service_provided):
         self.supplier_id = supplier_id
         self.name = name
         self.address = address
         self.contact_details = contact_details
-        self.services_offered = []
+        self.service_provided = service_provided
 
 # Venue class
 class Venue:
@@ -237,21 +280,7 @@ def display_venue_details(venue_id):
 
 
 #START OF GUI
-from tkinter import messagebox, simpledialog
-import pickle
-import os
-
 CLIENT_FILE_PATH = "clients.bin"
-
-
-class Client:
-    def __init__(self, client_id, name, address, contact_details, budget):
-        self.client_id = client_id
-        self.name = name
-        self.address = address
-        self.contact_details = contact_details
-        self.budget = budget
-
 
 class ClientManagement:
     def __init__(self):
@@ -417,28 +446,7 @@ class ClientGUI:
 
 EMPLOYEE_FILE_PATH = "employees.bin"
 
-class Employee:
-            def __init__(
-                    self,
-                    name,
-                    employee_id,
-                    department,
-                    job_title,
-                    basic_salary,
-                    age,
-                    date_of_birth,
-                    passport_details,
-                    manager_id=None,
-            ):
-                self.name = name
-                self.employee_id = employee_id
-                self.department = department
-                self.job_title = job_title
-                self.basic_salary = basic_salary
-                self.age = age
-                self.date_of_birth = date_of_birth
-                self.passport_details = passport_details
-                self.manager_id = manager_id
+
 
 class EmployeeManagement:
             def __init__(self):
@@ -660,40 +668,7 @@ class EmployeeGUI:
 
 EVENT_FILE_PATH = "events.bin"
 
-class Event:
-    def __init__(
-            self,
-            event_id,
-            event_type,  # Change the parameter name
-            theme,
-            date,
-            time,
-            duration,
-            venue_address,
-            client_id,
-            guest_list,
-            catering_company,
-            cleaning_company,
-            decorations_company,
-            entertainment_company,
-            furniture_supply_company,
-            invoice,
-    ):
-        self.event_id = event_id
-        self.event_type = event_type
-        self.theme = theme
-        self.date = date
-        self.time = time
-        self.duration = duration
-        self.venue_address = venue_address
-        self.client_id = client_id
-        self.guest_list = guest_list
-        self.catering_company = catering_company
-        self.cleaning_company = cleaning_company
-        self.decorations_company = decorations_company
-        self.entertainment_company = entertainment_company
-        self.furniture_supply_company = furniture_supply_company
-        self.invoice = invoice
+
 class EventManagement:
         def __init__(self):
             self.events = self.load_events()
@@ -864,15 +839,6 @@ class EventGUI:
 
 GUEST_FILE_PATH = "guests.bin"
 
-
-class Guest:
-    def __init__(self, guest_id, name, address, contact_details):
-        self.guest_id = guest_id
-        self.name = name
-        self.address = address
-        self.contact_details = contact_details
-
-
 class GuestManagement:
     def __init__(self):
         self.guests = self.load_guests()
@@ -1015,16 +981,6 @@ class GuestGUI:
             messagebox.showerror("Error", f"Could not display guest: {e}")
 
 SUPPLIER_FILE_PATH = "suppliers.bin"
-
-
-class Supplier:
-    def __init__(self, supplier_id, name, address, contact_details, service_provided):
-        self.supplier_id = supplier_id
-        self.name = name
-        self.address = address
-        self.contact_details = contact_details
-        self.service_provided = service_provided
-
 
 class SupplierManagement:
     def __init__(self):
@@ -1185,17 +1141,6 @@ class SupplierGUI:
 
 
 VENUE_FILE_PATH = "venues.bin"
-
-
-class Venue:
-    def __init__(self, venue_id, name, address, contact, min_guests, max_guests):
-        self.venue_id = venue_id
-        self.name = name
-        self.address = address
-        self.contact = contact
-        self.min_guests = min_guests
-        self.max_guests = max_guests
-
 
 class VenueManagement:
     def __init__(self):
@@ -1363,8 +1308,6 @@ class VenueGUI:
         except Exception as e:
             messagebox.showerror("Error", f"Could not display venue: {e}")
 
-import tkinter as tk
-from tkinter import ttk
 
 
 
@@ -1414,6 +1357,92 @@ class ManagementApp(tk.Tk):
         self.venue_gui = VenueGUI(self.venue_tab)
         self.venue_tab.pack(fill="both", expand=True)
         self.tab_control.add(self.venue_tab, text="Venues")
+
+        # Inside the ManagementApp class init_tabs method
+        self.security_tab = ttk.Frame(self.tab_control)
+        self.security_gui = GuestSecurityGUI(self.security_tab)
+        self.security_tab.pack(fill="both", expand=True)
+        self.tab_control.add(self.security_tab, text="Guest Security")
+
+
+
+    def check_access(self, person):
+        # Assuming 'securityClearanceLevel' is an attribute of Guest and Client,
+        # and 0 means no access while higher numbers indicate higher clearance.
+        if isinstance(person, (Guest, Client)):
+            if person.security_clearance_level <= self.security_clearance_level:
+                print(f"{person.name} has access to the venue.")
+                return True
+            else:
+                print(f"{person.name} does not have access to the venue.")
+                return False
+        else:
+            print(f"{person.name} does not have access to the venue.")
+            return False
+
+    def determine_needed_security(self, venue):
+        # This is a placeholder for the logic you'll implement to determine
+        # needed security based on a Venue's attributes, like max_guests.
+        return venue.max_guests // 100  # Example: 1 security for every 100 guests
+
+
+class GuestSecurityGUI:
+    def __init__(self, master):
+        self.master = master
+        self.create_widgets()
+
+    def create_widgets(self):
+        tk.Label(self.master, text="Security Clearance Level:").grid(row=0, column=0, sticky="w")
+        self.security_clearance_level_entry = tk.Entry(self.master)
+        self.security_clearance_level_entry.grid(row=0, column=1, sticky="we")
+
+        tk.Label(self.master, text="Assigned Venue ID:").grid(row=1, column=0, sticky="w")
+        self.assigned_venue_id_entry = tk.Entry(self.master)
+        self.assigned_venue_id_entry.grid(row=1, column=1, sticky="we")
+
+        tk.Label(self.master, text="Security Shift:").grid(row=2, column=0, sticky="w")
+        self.security_shift_entry = tk.Entry(self.master)
+        self.security_shift_entry.grid(row=2, column=1, sticky="we")
+
+        self.add_button = tk.Button(
+            self.master, text="Add Security", command=self.add_security
+        )
+        self.add_button.grid(row=3, column=0, columnspan=2, sticky="we")
+
+    def load_venues_from_file(self):
+        try:
+            with open(VENUE_FILE_PATH, 'rb') as file:
+                return pickle.load(file)
+        except FileNotFoundError:
+            return {}
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load venues: {e}")
+            return {}
+
+    def add_security(self):
+        try:
+            clearance_level = int(self.security_clearance_level_entry.get())
+            venue_id = self.assigned_venue_id_entry.get()
+            shift = self.security_shift_entry.get()
+
+            # Load venues each time we try to add security to get the most updated list
+            self.venues = self.load_venues_from_file()
+
+            assigned_venue = self.venues.get(venue_id)
+            if assigned_venue is None:
+                messagebox.showerror("Error", "Assigned venue ID does not exist.")
+                return
+
+            new_security = GuestSecurity(clearance_level, assigned_venue, shift)
+            messagebox.showinfo("Success", "Security added successfully.")
+            # Here you would implement logic to save the new_security object
+        except ValueError:
+            messagebox.showerror("Error", "Security clearance level must be an integer.")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+# This needs to be integrated into the existing tkinter app structure
+# You can instantiate it on its own tab in the notebook just like other GUI parts
 
 
 if __name__ == "__main__":
